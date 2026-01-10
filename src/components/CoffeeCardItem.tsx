@@ -6,15 +6,18 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { use } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { themeColors } from "../theme";
 import { Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CoffeeCardItem({ item }) {
   const { height: SCREEN_H, width: SCREEN_W } = Dimensions.get("window");
   const CARD_WIDTH = SCREEN_W * 0.7;
   const CARD_HEIGHT = SCREEN_H * 0.55;
+
+  const navigation = useNavigation();
 
   return (
     <View
@@ -62,7 +65,10 @@ export default function CoffeeCardItem({ item }) {
             $ {item.price}
           </Text>
 
-          <TouchableOpacity className="w-12 h-12 rounded-full items-center justify-center">
+          <TouchableOpacity
+            className="w-12 h-12 rounded-full items-center justify-center"
+            onPress={() => navigation.navigate("detail", { ...item })}
+          >
             <Entypo name="circle-with-plus" size={42} color="white" />
           </TouchableOpacity>
         </View>
