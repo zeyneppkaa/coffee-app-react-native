@@ -200,7 +200,21 @@ export default function DetailScreen(props) {
               <Feather name="shopping-bag" size={24} color="black" />
             </TouchableOpacity>
 
-            <TouchableOpacity className="bg-primary flex-1 ml-4 rounded-full p-4">
+            <TouchableOpacity
+              className="bg-primary flex-1 ml-4 rounded-full p-4"
+              onPress={() => {
+                if (!cartItem) {
+                  dispatch(
+                    addItem({
+                      id: item.id,
+                      name: item.name,
+                      price: item.price,
+                      image: item.image,
+                    })
+                  );
+                }
+              }}
+            >
               <Text className="text-center text-white font-semibold text-base">
                 Buy Now
               </Text>
