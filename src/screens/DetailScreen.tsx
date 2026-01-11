@@ -14,6 +14,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
 import { themeColors } from "../theme";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, decreaseQty, increaseQty } from "../store/CartSlice";
 
 const windowWidth = Dimensions.get("window").width;
 const BG_IMAGE_HEIGHT = windowWidth * 0.75;
@@ -24,6 +26,12 @@ export default function DetailScreen(props) {
   const item = props.route.params;
   const [size, setSize] = useState("small");
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+  const cartItem = useSelector((state) =>
+    state.cart.items.find((i) => i.id === item.id)
+  );
+  const qty = cartItem?.qty ?? 1;
 
   return (
     <View className="flex-1 bg-white">
@@ -147,15 +155,37 @@ export default function DetailScreen(props) {
 
             {/* minus plus */}
             <View className="flex-row items-center p-1 px-4 gap-4">
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  if (qty > 1) {
+                    dispatch(decreaseQty(item.id));
+                  }
+                }}
+              >
                 <AntDesign
                   name="minus-circle"
                   size={24}
                   color={themeColors.bgPrimary}
                 />
               </TouchableOpacity>
-              <Text className="text-base text-gray-600">2</Text>
-              <TouchableOpacity>
+              <Text className="text-base text-gray-600">{qty}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  if (!cartItem) {
+                    dispatch(
+                      addItem({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        image: item.image,
+                      })
+                    );
+                    dispatch(increaseQty(item.id));
+                  } else {
+                    dispatch(increaseQty(item.id));
+                  }
+                }}
+              >
                 <AntDesign
                   name="plus-circle"
                   size={24}

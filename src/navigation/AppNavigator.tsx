@@ -14,6 +14,9 @@ import { View } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import { themeColors } from "../theme";
 import DetailScreen from "../screens/DetailScreen";
+import CartScreen from "../screens/CartScreen";
+import { store } from "../store";
+import { Provider } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,7 +47,7 @@ function HomeTabs() {
       >
         <Tab.Screen name="home" component={HomeScreen} />
         <Tab.Screen name="fav" component={FavScreen} />
-        <Tab.Screen name="product" component={ProductScreen} />
+        <Tab.Screen name="cart" component={CartScreen} />
       </Tab.Navigator>
     </SafeAreaView>
   );
@@ -56,7 +59,7 @@ const renderTabIcon = (routeName: string, focused: boolean) => {
     iconName = "home";
   } else if (routeName === "fav") {
     iconName = "heart";
-  } else if (routeName === "product") {
+  } else if (routeName === "cart") {
     iconName = "shopping-cart";
   }
 
@@ -82,24 +85,26 @@ const renderTabIcon = (routeName: string, focused: boolean) => {
 
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          contentStyle: { backgroundColor: "#000" },
-        }}
-      >
-        <Stack.Screen
-          name="Home"
-          component={HomeTabs}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="detail"
-          component={DetailScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            contentStyle: { backgroundColor: "#000" },
+          }}
+        >
+          <Stack.Screen
+            name="Home"
+            component={HomeTabs}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="detail"
+            component={DetailScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
